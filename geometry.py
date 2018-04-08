@@ -1,4 +1,3 @@
-from math import pi
 from collections import Counter
 from utils import *
 
@@ -9,10 +8,11 @@ class Circle(object):
 
         self.data = data
         self.loopTerminate = Counter()
-        self.formulas = equation(['area = pi*radius**2',
-                                  'diameter = 2*radius',
-                                  'perimeter = 2*pi*r'
-                                  ])
+        self.formulas = []
+        equations(['area = pi*radius**2',
+                   'diameter = 2*radius',
+                   'perimeter = 2*pi*r',
+                   ], self.formulas)
 
     def __getitem__(self, query):
         """
