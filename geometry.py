@@ -1,3 +1,8 @@
+"""
+    After question type and shape have been identified
+    Calls geometry to assign proper shape to solve problem.
+"""
+
 from collections import Counter
 from utils import *
 
@@ -9,6 +14,8 @@ class Circle(object):
         self.data = data
         self.loopTerminate = Counter()
         self.formulas = []
+
+        # initialises formulas for tree solution search
         equations(['area = pi*radius**2',
                    'diameter = 2*radius',
                    'perimeter = 2*pi*r',
@@ -25,3 +32,8 @@ class Circle(object):
 
 shape_type = {"circle": Circle,
               }
+
+
+def geometry(s_type, query):
+    shape = shape_type[s_type]()
+    return shape[query]
