@@ -1,2 +1,3 @@
 # ProSolve
-Solves Maths problems only, for now
+Application that solves Maths word problems...
+Well..., not yet, but soon
