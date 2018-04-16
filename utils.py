@@ -13,8 +13,10 @@ class Node(Table):
             You might be experiencing some indexing or table related errors
             it's not you, it's me. Don't worry i gatchu just change the Node
             to a  default object type then create a table within it. Don't
-            forget to create all table methods you used too. Lol, I'm sorry,
-            I actually thought it would make life easier. So..., How are you?
+            forget to create all table methods you used too Or you could try
+            to figure out the way table stores and manipulates it's info (less
+            code update for more research, I know you'd want to first try this).
+            So..., How are you?
     """
     def __init__(self):
         Table.__init__(self)
