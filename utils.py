@@ -1,32 +1,61 @@
 """
 Various tools and utilities used
 """
-import sys
 from sympy import solve, sympify, Eq, symbols
+from collections import defaultdict
+from datascience import *
 
 
-def equations(items, formulas):
-    """
-    Converts input string expression to function and stores
-    :param items: string or list of string expressions
-    :param formulas: list of functions
-    :return:
-    """
-    error_messages = []
+class Node(object):
 
-    if type(items) == str:
-        items = [items]
+    def __init__(self):
+        self.table = Table().with_columns('Equation', [],
+                                          'Symbols', [],
+                                          'Complexity', [],
+                                          )
 
-    for i in range(len(items)):
-        string = items[i]
+    def add_row(self, row):
+        self.table = self.table.with_row(row)
+
+
+class SolutionGraph(object):
+
+    def __init__(self, equations):
+        self.tree = defaultdict(Node)
+
+        # build/Initialize tree
+        for equation in equations:
+            self.add_equation(equation)
+        for node in self.tree:
+            self.tree[node].table.sort('Complexity')
+
+    def add_equation(self, equation):
+        """
+        Converts input string expression to function and stores
+        :param equation:
+        :return:
+        """
         try:
-            # right hand side and left hand sides of the equation
-            lhs, rhs = string.split('=')
-            formulas.append(Eq(symbols(lhs), sympify(rhs)))
+            lhs, rhs = equation.split('=')
+            formula = Eq(symbols(lhs), sympify(rhs))
+            variables = formula.free_symbols
+            for variable in variables:
+                new_formula = Eq(variable, solve(formula, variable)[-1])
+                row = [new_formula, variables.difference([variable]), len(variables)-1]
+                # print('\n before', self.tree[variable].table, sep='\n')
+                self.tree[variable].add_row(row)
+                # print('\n after', self.tree[variable].table, sep='\n')
 
-        except ValueError as message:
-            # Saves error(s) for display
-            error_messages.append(str(message))
+        except ValueError:
+            print('Equation Error: Invalid expression ',
+                  equation, '\n \t Ignoring expression...')
+            pass
+
+    def __str__(self):
+        string = ''
+        for node in self.tree:
+            string += "\n" + str(node) + " :\n" + self.tree[node].table.__str__() + '\n'
+        return string
 
 
 def insufficient_data_handler(query, data):

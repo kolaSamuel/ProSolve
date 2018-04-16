@@ -13,17 +13,17 @@ class Circle(object):
 
         self.data = data
         self.loopTerminate = Counter()
-        self.formulas = []
+        self.formulas = ['area = pi*radius**2',
+                         'diameter = 2*radius',
+                         'perimeter = 2*pi*radius',
+                         ]
 
-        # initialises formulas for tree solution search
-        equations(['area = pi*radius**2',
-                   'diameter = 2*radius',
-                   'perimeter = 2*pi*r',
-                   ], self.formulas)
+        # initialises formulas for SolutionGraph search
+        self.solution = SolutionGraph(self.formulas)
 
     def __getitem__(self, query):
         """
-        Finds query buy checking through formulas to find relation
+        Finds query buy searching through Solution graph
         :param query:
         :return:
         """
