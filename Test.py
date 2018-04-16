@@ -10,6 +10,7 @@ B = ['area = pi*radius**2', 'diameter = 2*radius', 'perimeter = 2*pi*radius', 't
 tree = SolutionGraph(B)
 print(tree)
 
+
 # def tester():
 #     equations(['area = pi*radius**2',
 #                'diameter = 2*radius',

@@ -2,23 +2,20 @@
 Various tools and utilities used
 """
 from sympy import solve, sympify, Eq, symbols
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 from datascience import Table, make_array
 
 
-class Node(object):
+class Node(Table):
 
     def __init__(self):
-        self.table = Table(make_array('Equations',
-                                      'Symbols',
-                                      'Complexity',)
-                           )
-
-    def add_row(self, row):
-        self.table = self.table.with_row(row)
-
-    def __str__(self):
-        return self.table.__str__()
+        Table.__init__(self)
+        self._columns = OrderedDict(
+            {'Equation': [],
+             'Symbols': [],
+             'Complexity': [],
+             }
+        )
 
 
 class SolutionGraph(object):
@@ -34,7 +31,7 @@ class SolutionGraph(object):
         for equation in equations:
             self.add_equation(equation)
         for node in self.tree:
-            self.tree[node].table.sort('Complexity')
+            self.tree[node].sort('Complexity')
 
     def add_equation(self, equation):
         """
@@ -50,7 +47,7 @@ class SolutionGraph(object):
                 new_formula = Eq(variable, solve(formula, variable)[-1])
                 row = [new_formula, variables.difference([variable]), len(variables)-1]
                 # print('\n before', self.tree[variable].table, sep='\n')
-                self.tree[variable].add_row(row)
+                self.tree[variable] = self.tree[variable].with_row(row)
                 # print('\n after', self.tree[variable].table, sep='\n')
 
         except ValueError:
