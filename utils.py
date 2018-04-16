@@ -3,11 +3,19 @@ Various tools and utilities used
 """
 from sympy import solve, sympify, Eq, symbols
 from collections import defaultdict, OrderedDict
-from datascience import Table, make_array
+from datascience import Table
 
 
 class Node(Table):
-
+    """
+        pre- initialized table class
+        Note to future self:
+            You might be experiencing some indexing or table related errors
+            it's not you it's me. Don't worry i gatchu just change the Node
+            to a  default object type then create a table within it. Don't
+            forget to create all table methods you used too. Lol, I'm sorry,
+            I actually thought it would make life easier. So..., How are you?
+    """
     def __init__(self):
         Table.__init__(self)
         self._columns = OrderedDict(
