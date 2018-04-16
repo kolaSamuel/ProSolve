@@ -3,16 +3,16 @@ Various tools and utilities used
 """
 from sympy import solve, sympify, Eq, symbols
 from collections import defaultdict
-from datascience import Table
+from datascience import Table, make_array
 
 
 class Node(object):
 
     def __init__(self):
-        self.table = Table().with_columns('Equation', [],
-                                          'Symbols', [],
-                                          'Complexity', [],
-                                          )
+        self.table = Table(make_array('Equations',
+                                      'Symbols',
+                                      'Complexity',)
+                           )
 
     def add_row(self, row):
         self.table = self.table.with_row(row)
