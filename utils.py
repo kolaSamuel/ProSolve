@@ -3,7 +3,7 @@ Various tools and utilities used
 """
 from sympy import solve, sympify, Eq, symbols
 from collections import defaultdict
-from datascience import *
+from datascience import Table
 
 
 class Node(object):
@@ -17,13 +17,20 @@ class Node(object):
     def add_row(self, row):
         self.table = self.table.with_row(row)
 
+    def __str__(self):
+        return self.table.__str__()
+
 
 class SolutionGraph(object):
+    """
+        A cyclic graph that connects all inter-related equations to themselves
+        to convert problem into search problem.
+    """
 
     def __init__(self, equations):
         self.tree = defaultdict(Node)
 
-        # build/Initialize tree
+        # build/Initialize graph
         for equation in equations:
             self.add_equation(equation)
         for node in self.tree:
@@ -48,13 +55,13 @@ class SolutionGraph(object):
 
         except ValueError:
             print('Equation Error: Invalid expression ',
-                  equation, '\n \t Ignoring expression...')
+                  equation, '\n \t Ignoring expression...\n')
             pass
 
     def __str__(self):
         string = ''
         for node in self.tree:
-            string += "\n" + str(node) + " :\n" + self.tree[node].table.__str__() + '\n'
+            string += "\n" + str(node) + " :\n" + self.tree[node].__str__() + '\n'
         return string
 
 
