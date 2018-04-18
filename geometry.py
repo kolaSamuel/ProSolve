@@ -3,7 +3,6 @@
     Calls geometry to assign proper shape to solve problem.
 """
 
-from collections import Counter
 from utils import *
 
 
@@ -12,14 +11,13 @@ class Circle(object):
     def __init__(self, data):
 
         self.data = data
-        self.loopTerminate = Counter()
         self.formulas = ['area = pi*radius**2',
                          'diameter = 2*radius',
                          'perimeter = 2*pi*radius',
                          ]
 
         # initialises formulas for SolutionGraph search
-        self.solution = SolutionGraph(self.formulas)
+        self.find = SolutionGraph(self.formulas, data)
 
     def __getitem__(self, query):
         """
@@ -27,7 +25,7 @@ class Circle(object):
         :param query:
         :return:
         """
-        pass
+        return self.find[query]
 
 
 shape_type = {"circle": Circle,
