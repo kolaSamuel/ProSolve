@@ -2,30 +2,23 @@
 Various tools and utilities used
 """
 from sympy import solve, sympify, Eq, symbols
-from collections import defaultdict, OrderedDict
+from collections import defaultdict
 from datascience import Table
 
 
 class Node(Table):
     """
-        pre- initialized table class
-        Note to future self:
-            You might be experiencing some indexing or table related errors
-            it's not you, it's me. Don't worry i gatchu just change the Node
-            to a  default object type then create a table within it. Don't
-            forget to create all table methods you used too Or you could try
-            to figure out the way table stores and manipulates it's info (less
-            code update for more research, I know you'd want to first try this).
-            So..., How are you?
+        pre- initialized table+ class
     """
     def __init__(self):
-        Table.__init__(self)
-        self._columns = OrderedDict(
-            {'Equation': [],
-             'Symbols': [],
-             'Complexity': [],
-             }
-        )
+        labels = ['Equation', 'Symbols',
+                  'Complexity']
+        Table.__init__(self, labels=labels)
+        self.all_children = set()
+
+    def update(self, row, children):
+        self.append(row)
+        self.all_children.update(children)
 
 
 class SolutionGraph(object):
@@ -34,12 +27,24 @@ class SolutionGraph(object):
         to convert problem into search problem.
     """
 
-    def __init__(self, equations):
+    def __init__(self, equations, data):
+        """
+            Initializes and builds solution graph, stores data(changing the
+            data's "key identifiers" from string to symbols) and creates a set of
+            all data already found or given.
+        :param equations: array of string expressions
+        :param data: already given data
+        """
+        # Initializations
         self.tree = defaultdict(Node)
+        self.data = {symbols(variable): data[variable] for variable in data}
+        self.data_set = set(self.data)
 
-        # build/Initialize graph
+        # Build graph
         for equation in equations:
             self.add_equation(equation)
+
+        # Magic, actually just organised children in order of likelihood
         for node in self.tree:
             self.tree[node].sort('Complexity')
 
@@ -54,21 +59,39 @@ class SolutionGraph(object):
             formula = Eq(symbols(lhs), sympify(rhs))
             variables = formula.free_symbols
             for variable in variables:
-                new_formula = Eq(variable, solve(formula, variable)[-1])
-                row = [new_formula, variables.difference([variable]), len(variables)-1]
-                # print('\n before', self.tree[variable].table, sep='\n')
-                self.tree[variable] = self.tree[variable].with_row(row)
-                # print('\n after', self.tree[variable].table, sep='\n')
+                new_formula = solve(formula, variable)[-1]
+
+                # new_variables == no of variables in formula that are unknown
+                new_variables = new_formula.free_symbols - self.data_set
+                row = [new_formula, new_variables, len(new_variables)]
+
+                # updates
+                self.tree[variable].update(row, new_variables)
 
         except ValueError:
             print('Equation Error: Invalid expression ',
                   equation, '\n \t Ignoring expression...\n')
             pass
 
+    def __getitem__(self, item):
+        """
+        Finds solution to query
+        :param item: query as string
+        :return:
+        """
+        query = symbols(item)
+
+        if query in self.data_set:
+            print('Redundant query, value already previously found as ',
+                  self.data[query])
+
+        visited = set()
+
     def __str__(self):
         string = ''
         for node in self.tree:
-            string += "\n" + str(node) + " :\n" + self.tree[node].__str__() + '\n'
+            string += "\n" + str(node) + " :\n" + self.tree[node].__str__() \
+                      + '\n' + self.tree[node].all_children.__str__() + '\n'
         return string
 
 
@@ -108,6 +131,6 @@ def insufficient_data_handler(query, data):
                 variable = 'done'
 
         if data_changes:
-            print("Attempting to Resolve problem...")
+            print("Attempting to Re-Solve the problem...")
 
     return data_changes
