@@ -91,6 +91,12 @@ class SolutionGraph(object):
         self.all_data_set.add(node)
 
     def search(self, node, visited):
+        """
+        A* but looks like a dfs search
+        :param node: current node
+        :param visited: set of visited pairs
+        :return: True or False, depending on if solvable or not
+        """
         can_solve = False  # unnecessary initialization. Has no effect
         row_len = self.tree[node].num_rows
         for index in range(row_len):
