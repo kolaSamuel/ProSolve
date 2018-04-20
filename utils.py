@@ -132,21 +132,24 @@ class SolutionGraph(object):
         :return:
         """
         query = symbols(item)
+        is_possible = True
 
-        if query in self.data_set:
-            print('Redundant query,', query, 'already previously found as :', )
-            return self.data[query]
+        while is_possible:
+            is_possible = False
+            if query in self.data_set:
+                print('Redundant query,', query, 'already previously found as :', )
+                return self.data[query]
 
-        start_node = query
-        visited = set()
+            start_node = query
+            visited = set()
 
-        solution = self.search(start_node, visited)
+            solution = self.search(start_node, visited)
 
-        if solution:
-            print(item.title(), "found! :")
-            return self.data[query]
-        else:
-            insufficient_data_handler(item, self.data)
+            if solution:
+                print(item.title(), "found! :")
+                return self.data[query]
+            else:
+                is_possible = insufficient_data_handler(item, self.data, self.data_set)
 
     def __str__(self):
         string = ''
@@ -156,7 +159,7 @@ class SolutionGraph(object):
         return string
 
 
-def insufficient_data_handler(query, data):
+def insufficient_data_handler(query, data, data_set):
 
     """
     Checks if data is accurate ,tries again if not and terminates if accurate
@@ -178,13 +181,14 @@ def insufficient_data_handler(query, data):
         print()
         try:
             variable, value = input("Input: ").strip().split()
-            variable.lower()
+            variable = symbols(variable.lower())
         except ValueError:
             variable = 'done'
 
         while variable != 'done':
             data_changes += 1
             data[variable] = int(value)
+            data_set.add(variable)
             try:
                 variable, value = input("Input: ").strip().split()
                 variable = symbols(variable.lower())
