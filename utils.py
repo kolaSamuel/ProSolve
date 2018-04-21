@@ -165,12 +165,13 @@ def insufficient_data_handler(query, data, data_set):
     Checks if data is accurate ,tries again if not and terminates if accurate
     :param query: variable to be calculated given data
     :param data: available information to evaluate query
+    :param data_set: set of data variables
     :return: 0 that terminates or any other value ( which indicates a re-solve)
     """
 
     data_changes = 0
 
-    print("Insufficient data given to compute, ", query)
+    print("\nInsufficient data given to compute, ", query)
     response = input("Confirm data? Y/N \n").strip()
 
     if response[:1].capitalize() == "Y":
@@ -196,6 +197,6 @@ def insufficient_data_handler(query, data, data_set):
                 variable = 'done'
 
         if data_changes:
-            print("Attempting to Re-Solve the problem...")
+            print("\nAttempting to Re-Solve the problem...")
 
     return data_changes

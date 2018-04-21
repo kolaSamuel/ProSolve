@@ -4,6 +4,9 @@
 """
 
 from utils import *
+from app_data import get_formula, add_formula
+
+app_name = "Geometry"
 
 
 class Circle(object):
@@ -13,10 +16,8 @@ class Circle(object):
         :param data: list of given data from question
         :param find: list of query's from question
         """
-        self.formulas = ['area = pi*radius**2',
-                         'diameter = 2*radius',
-                         'perimeter = 2*pi*radius',
-                         ]
+        shape = "Circle"
+        self.formulas = get_formula(app_name, shape)
 
         # initialises formulas for SolutionGraph search
         self.find = SolutionGraph(self.formulas, data, find)
