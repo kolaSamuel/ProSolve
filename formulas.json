@@ -1,14 +1,15 @@
 {
   "Info": {
-    "__comment__": "file containing all relations and formulas used",
-    "no_of_sections": 0,
+    "__comment__": "File containing all Formulas used",
     "no_of_formulas": 3,
+    "no_of_sections": 0,
     "formulas": null,
     "sections": [
       "Geometry"
     ]
   },
   "Geometry": {
+    "__comment__": null,
     "no_of_formulas": 3,
     "no_of_sections": 0,
     "formulas": null,
@@ -16,14 +17,15 @@
       "Circle"
     ],
     "Circle": {
+      "__comment__": null,
       "no_of_formulas": 3,
       "no_of_sections": 0,
-      "sections": null,
       "formulas": [
         "area = pi*radius**2",
         "radius =  diameter/2",
         "perimeter = pi*diameter"
-      ]
+      ],
+      "sections": null
     }
   }
 }

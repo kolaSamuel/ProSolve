@@ -14,6 +14,7 @@ class DataFormat(dict):
 
     def __init__(self):
         sections = [
+            ("__comment__", None),
             ("no_of_formulas", 0),
             ("no_of_sections", 0),
             ("sections", None),
